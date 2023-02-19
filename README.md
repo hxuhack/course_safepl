@@ -1,7 +1,8 @@
-This is the course web page of COMP737011 Memory Safety and Programming Language Design for postgraduate students at Fudan University. The course first goes through the Foundations of Memory Safety, and then teaches the Rust Programming Language by focusing on its special design for mitigating the memory-safety issues, and finally share some advanced topics towards memory safety protection.
+This is the course web page of **COMP737011 Memory Safety and Programming Language Design** for postgraduate students at Fudan University. The course will first go through the Foundations of Memory Safety Problem; then we will teach the Rust Programming Language by focusing on its special design for memory-safety protection; finally we will share some advanced topics useful for mitigating memory-safety issues.
 
 #### Part1: Foundations of Memory Safety 
-- Week1: [Course Introduction]() [Chapt 1. Stack Smashing]()
+
+- Week1: Course Introduction ([slide]), Chapt 1. Stack Smashing([slide],[notes])
 
 <!--
 - Week2: Chapt 2. Memory Allocator
