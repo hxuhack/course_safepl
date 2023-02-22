@@ -4,7 +4,7 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 ## Lecture Notes
 ### Part1: Foundations of Memory Safety 
 
-- Week1: Course Introduction ([slides]()), Chapt 1. Stack Smashing([slides](),[notes](./notes/chapter1_stack_smash.md))
+- Week1: Course Introduction ([slides](./slides/L0-Course_Intro.pdf)), Chapt 1. Stack Smashing([slides](./slides/L1-Stack_Smashing.pdf),[notes](./notes/chapter1_stack_smash.md))
 
 <!--
 - Week2: Chapt 2. Memory Allocator
