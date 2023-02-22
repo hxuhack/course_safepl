@@ -46,7 +46,7 @@ The trick lies the stack, we can print the stack by analyzing its assembly code.
 0x4011c1 <+113>:   pop    %rbp
 0x4011c2 <+114>:   retq
 ```
-![image](./images/chapt1-stack-main.png)
+![image](./figures/chapt1-stack-main.png)
 
 Let's assume the our porpose is to enforce the function to return 1, so we can trace the data flow of the return value backwards. Starting from Line <+106>, we know the return value of the register (%eax) is moved from the stack -0x4(%rbp). Line <+99> saves 0x0 to -0x4(%rbp), while Line <+62> saves 0x1 to -0x4(%rbp). So we can tamper the buffer of -0x4(%rbp) to bypass the validation. Line <+4> tells us the assembly code increases the stack size with 0x50. We can compute the offset of -0x4(%rbp) to the register %rsp should be 0x4b or 76 in decimal. In order to let the function return 1, we can input a 76-byte buf with the last four bytes to be 1.
 
