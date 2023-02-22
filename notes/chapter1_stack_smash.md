@@ -62,8 +62,9 @@ Now, we discuss a more general senario, i.e., 1) the attacker cannot obtain the 
 #### 1.1.2.1 Stack Layout Analysis
 The purpose is to obtain the offset of the return address so that we can point it to the another code address, e.g., shell code. Let's still use our previous toy program for demonstration. The idea is to input several 'A's (hexdecimal ASCII: 0X41). If it has changed the return addresses, then the program will not be able to continue the execution and report the bad return address. We can gradually increase the length of the input to learn the offset of the return address. 
 
-| previous frame |
 |                |
+|:--------------:|
+| previous frame |
 |   ret address  |
 |       ...      |
 |    AAAAAAAA    |
