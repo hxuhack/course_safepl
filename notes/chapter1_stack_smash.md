@@ -3,6 +3,7 @@ In this chapter, we discuss the most common and easy-to-understand memory-safety
 
 ## Section 1. Stack Smashing
 
+### Warm Up
 Let's use the following code snippet as a toy example, which contains a validation process that requires the user to input a key to pass the validation. The code contains a buffer overflow bug because the length of buf is 64 while it may read 160 byte data. Supposing the user neither know a valid key nor can obtain the source code. How can he find a key to pass the validation? 
 
 ```
@@ -18,7 +19,7 @@ int validation() {
     return 0;
 }
 ```
-The trick lies the stack, we can print the stack by analyzing its assembly code.
+The trick lies in the stack layout, and we can obtain the layout by analyzing its assembly code.
 ```
 0x401150 <+0>:     push   %rbp
 0x401151 <+1>:     mov    %rsp,%rbp
@@ -49,5 +50,10 @@ The trick lies the stack, we can print the stack by analyzing its assembly code.
 ![image](./figures/chapt1-stack-main.png)
 
 Let's assume the our porpose is to enforce the function to return 1, so we can trace the data flow of the return value backwards. Starting from Line <+106>, we know the return value of the register (%eax) is moved from the stack -0x4(%rbp). Line <+99> saves 0x0 to -0x4(%rbp), while Line <+62> saves 0x1 to -0x4(%rbp). So we can tamper the buffer of -0x4(%rbp) to bypass the validation. Line <+4> tells us the assembly code increases the stack size with 0x50. We can compute the offset of -0x4(%rbp) to the register %rsp should be 0x4b or 76 in decimal. In order to let the function return 1, we can input a 76-byte buf with the last four bytes to be 1.
+
+### Steps of Stack Smashing
+- Step 1. Detect buffer overflow bugs: Find an input that crashes a program e.g., via fuzz testing. 
+- Step 2. Analyze stack layout of the buggy code
+- Step 3. Design the exploit: To obtain the shell. e.g., with return-oriented programming
 
 ## Section 2. Protection Techniques
