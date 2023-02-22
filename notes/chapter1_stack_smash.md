@@ -189,7 +189,7 @@ Program Headers:
 ```
 
 ### 1.2.2 RoP Attack
-If DEP is enabled, we cannot inject shellcode directly on the stack. The idea of RoP is to use existing codes to achieve the same sematics. For example, we may change the return address to the system function. As long as we can set the patameter to "/bin/sh" before that, we should be able to execute system("/bin/sh") and obtain the shell. 
+If DEP is enabled, we cannot inject shellcode directly on the stack. The idea of RoP is to use existing code to achieve the same sematics. For example, we may change the return address to the system function. As long as we can set the patameter to "/bin/sh" before that, we should be able to execute system("/bin/sh") and obtain the shell. 
 
 The following figure demonstrates the mechanism of an RoP attack. We first change the return address to some gaddet code that allow us to assign the parameter value to "/bin/sh". According to the calling convention of x86_64, the first parameter is saved in the rdi register. Therefore, some instructions containing "pop rdi" might be useful as our gadget. In our example, after "pop rdi", the "ret" instruction will use the data on top of the stack as the return address. We set the address to the function entry of system().
 
@@ -234,7 +234,7 @@ payload = "A" * 88 + p64(ret_addr) + p64(binsh_addr) + p64(system_addr)
 ```
 
 ### 1.2.3 Stack Canary 
-Stack canary is a widely used technique to check the stack integrity with a sentinel. Developers can enable stack canary with an option -fstack-protector when compiling their code. The generated assembly code is shown as following.
+Stack canary is a widely used technique to check the stack integrity with a sentinel. Developers can enable stack canary with an option -fstack-protector when compiling their code. The generated assembly code is shown as follows.
 
 ```
 push   %rbp
@@ -258,7 +258,7 @@ retq
 callq  0x4004a0 <__stack_chk_fail@plt>
 ```
 
-In the assembly code, fs:0x28 stores the sentinel stack-guard value. The code moves the value to -0x8(%rbp) and finally compare it with the original value when the function returns. 
+In the assembly code, fs:0x28 stores the sentinel stack-guard value. The code moves the value to -0x8(%rbp) and finally compare it with the original value when the function returns.
 |                |
 |:--------------:|
 | previous frame |
@@ -278,7 +278,90 @@ To set the levels of ASLR, use the following command.
 ```
 #: echo 2 | sudo tee /proc/sys/kernel/randomize_va_space
 ```
+Compile the following code to test the effectiveness of ASLR.
+```
+void* getStack(){
+   int ptr;
+   printf("Stack pointer address: %p\n", &ptr);
+};
+```
 
+As displayed below, the address of ptr changes in each execution. Also, the address ranges of the dynamic libraries get changed in each execution.
+```
+#: ./aslr 
+Stack pointer address: 0x7ffd94085bac
+#: ./aslr
+Stack pointer address: 0x7ffdbfe1571c
+#: ldd ./bug
+	linux-vdso.so.1 =>  (0x00007ffe48122000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f361c002000)
+	/lib64/ld-linux-x86-64.so.2 (0x000055e0381de000)
+#: ldd ./bug
+	linux-vdso.so.1 =>  (0x00007ffd2dbaa000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5fdbbf8000)
+	/lib64/ld-linux-x86-64.so.2 (0x0000557fcf719000)
+```
+
+To test PIE code, we should use the option '-fPIE -pie' when compiling the program.
+```
+void* getStack(){
+   return __builtin_return_address(0);
+};
+
+int main(int argc, char** argv){
+   printf("Ret addr: %p\n", getStack());
+   return 0;
+}
+```
+
+```
+#: clang -fPIE -pie aslr.c 
+#: ./aslr 
+Ret addr: 0x555b032ab77b
+#: ./aslr
+Ret addr: 0x556eed86777b
+```
+
+Disassembling the two binaries compiled with and without PIE can reveal their difference in memory address.
+```
+0x401160: push   %rbp
+0x401161: mov    %rsp,%rbp
+0x401164: sub    $0x20,%rsp
+0x401168: movl   $0x0,-0x4(%rbp)
+0x40116f: mov    %edi,-0x8(%rbp)
+0x401172: mov    %rsi,-0x10(%rbp)
+0x401176: callq  0x401130 <getStack>
+0x40117b: movabs $0x40201f,%rdi
+0x401185: mov    %rax,%rsi
+0x401188: mov    $0x0,%al
+0x40118a: callq  0x401030 <printf@plt>
+0x40118f: xor    %ecx,%ecx
+0x401191: mov    %eax,-0x14(%rbp)
+0x401194: mov    %ecx,%eax
+0x401196: add    $0x20,%rsp
+0x40119a: pop    %rbp
+0x40119b: retq 
+```
+
+```
+0x001170: push   %rbp
+0x001171: mov    %rsp,%rbp
+0x001174: sub    $0x20,%rsp
+0x001178: movl   $0x0,-0x4(%rbp)
+0x00117f: mov    %edi,-0x8(%rbp)
+0x001182: mov    %rsi,-0x10(%rbp)
+0x001186: callq  0x1140 <getStack>
+0x00118b: lea    0xe8d(%rip),%rdi  #0x201f
+0x001192: mov    %rax,%rsi
+0x001195: mov    $0x0,%al
+0x001197: callq  0x1030 <printf@plt>
+0x00119c: xor    %ecx,%ecx
+0x00119e: mov    %eax,-0x14(%rbp)
+0x0011a1: mov    %ecx,%eax
+0x0011a3: add    $0x20,%rsp
+0x0011a7: pop    %rbp
+0x0011a8: retq 
+```
 
 
 
