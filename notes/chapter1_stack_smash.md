@@ -1,9 +1,9 @@
 # Chapter 1. Stack Smashing
 In this chapter, we discuss the most common and easy-to-understand memory-safety problems: stack buffer overflow. An attacker could leverage such bugs to modity the stack and achieve malicious goals, knowning as stack smashing. We will not dive into the technical details of exploit writting (there are many such tutorials and tools available online, e.g., for CTF training) but mainly discuss why such bugs are dangerous and show how attacks could happen in practice. 
 
-## Section 1. Stack Smashing
+## Section 1.1 Stack Smashing
 
-### Warm Up
+### 1.1.1 Warm Up
 Let's use the following code snippet as a toy example, which contains a validation process that requires the user to input a key to pass the validation. The code contains a buffer overflow bug because the length of buf is 64 while it may read 160 byte data. Supposing the user neither know a valid key nor can obtain the source code. How can he find a key to pass the validation? 
 
 ```
@@ -51,7 +51,7 @@ The trick lies in the stack layout, and we can obtain the layout by analyzing it
 
 Let's assume the our porpose is to enforce the function to return 1, so we can trace the data flow of the return value backwards. Starting from Line <+106>, we know the return value of the register (%eax) is moved from the stack -0x4(%rbp). Line <+99> saves 0x0 to -0x4(%rbp), while Line <+62> saves 0x1 to -0x4(%rbp). So we can tamper the buffer of -0x4(%rbp) to bypass the validation. Line <+4> tells us the assembly code increases the stack size with 0x50. We can compute the offset of -0x4(%rbp) to the register %rsp should be 0x4b or 76 in decimal. In order to let the function return 1, we can input a 76-byte buf with the last four bytes to be 1.
 
-### Stack Smashing
+### 1.1.2 Stack Smashing
 A stack smashing attack contains three major steps:
 - Step 1. Detect buffer overflow bugs or find an input that can crash a program. This is usually done via fuzz testing. 
 - Step 2. Analyze stack layout of the buggy code. In practice, attackers may not be able to obtain the executables. 
@@ -59,7 +59,7 @@ A stack smashing attack contains three major steps:
 
 Now, we discuss a more general senario, i.e., 1) the attacker cannot obtain the binaries, and 2) his goal is to obtain the shell. 
 
-#### Stack Layout Analysis
+#### 1.1.2.1 Stack Layout Analysis
 The purpose is to obtain the offset of the return address so that we can point it to the another code address, e.g., shell code. Let's still use our previous toy program for demonstration. The idea is to input several 'A's (hexdecimal ASCII: 0X41). If it has changed the return addresses, then the program will not be able to continue the execution and report the bad return address. We can gradually increase the length of the input to learn the offset of the return address. 
 
 | previous frame |
@@ -89,7 +89,7 @@ Program received signal SIGSEGV, Segmentation fault.
 ```
 The log message displays a segmentation fault caused by a invalid return address 0x0000000a41414141. Because there are four 'A's, we can know the offset of the return address should be 92-4=88. Note that if you try more a 'A's, the error message may not be 0x0000414141414141 but another different address because 0x0000414141414141 is an invalid code address to the OS.
 
-#### Design the Exploit 
+#### 1.1.2.2 Design the Exploit 
 The following code is a shellcode snippts for x86_64, which executes system("/bin/sh"). 
 ```
 xor eax, eax
