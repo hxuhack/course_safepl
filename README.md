@@ -4,12 +4,12 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 ## Lecture Notes
 ### Part1: Foundations of Memory Safety 
 
-|   |   |   |
+| Schedule | Topic | Materials  |
 |---|---|---|
-|Week1| [Course Introduction](./slides/L0-Course_Intro.pdf), Stack Smashing| ([slides](./slides/L1-Stack_Smashing.pdf),[notes](./notes/chapter1_stack_smash.md))|
-|Week2 | Allocator Design | ([slides](./slides/L2-Allocator_Design.pdf), [notes](./notes/chapter2_allocator_design.md), [code](practice/chapt2-allocator.c))
+| Week1 | [Course Introduction](./slides/L0-Course_Intro.pdf), Stack Smashing | [slides](./slides/L1-Stack_Smashing.pdf),[notes](./notes/chapter1_stack_smash.md)|
+| Week2 | Allocator Design | [slides](./slides/L2-Allocator_Design.pdf), [notes](./notes/chapter2_allocator_design.md), [code](practice/chapt2-allocator.c)
+| Week3 | Heap Attack | |
 <!--
-- Week3: Heap Attack
 - Week4: Auto Memory Management
 - Week5: Memory Exhaustion
 - Week6: Concurrent Access
