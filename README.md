@@ -5,7 +5,7 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 ### Part1: Foundations of Memory Safety 
 
 - Week1: Course Introduction ([slides](./slides/L0-Course_Intro.pdf)), Chapt 1. Stack Smashing([slides](./slides/L1-Stack_Smashing.pdf),[notes](./notes/chapter1_stack_smash.md))
-- Week2: Chapt 2. Allocator Design ([slides](./slides/L2-Allocator_Design.pdf) [notes](./notes/chapter2_allocator_design.md))
+- Week2: Chapt 2. Allocator Design ([slides](./slides/L2-Allocator_Design.pdf), [notes](./notes/chapter2_allocator_design.md), [code](practice/chapt2-allocator.c))
 <!--
 - Week3: Chapt 3. Heap Attack
 - Week4: Chapt 4. Auto Memory Management
