@@ -52,7 +52,7 @@ static unsigned long HEADER_SIZE = 24;
 // ptr include overhead
 #define mem2chunk(mem) ((ty_chunk_ptr)((char*)(mem) - HEADER_SIZE))
 
-
+#define MEM_SIZE 1024 //define the init trunk size 
 
 //The structure of chunk is a double linked list
 struct chunk{
@@ -115,7 +115,28 @@ void free_new(void *mem) {
     }
 }
 
-#define MEM_SIZE 1024 
+void view_chunk(ty_chunk_ptr p){
+    void* bound = (void *) p + MEM_SIZE;
+    printf("===============trunk view begin=====================\n");    
+    printf("chunk address = %p, prev_size = %d, chunk size: %d, fd = %p, bk = %p\n", p, p->prev_size, p->size, p->fd, p->bk);
+    p = (void *) p + p->size-prev_inuse(p);
+    while(p < (void *) bound){
+        printf("chunk address = %p, prev_size = %d, chunk size: %d, fd = %p, bk = %p\n", p, p->prev_size, p->size, p->fd, p->bk);
+	p = (void *) p + p->size-prev_inuse(p);
+    }
+    printf("===============trunk view end=====================\n");    
+}
+
+void view_list(ty_chunk_ptr p){
+    printf("===============list view begin=====================\n");    
+    printf("chunk address = %p, prev_size = %d, chunk size: %d, fd = %p, bk = %p\n", p, p->prev_size, p->size, p->fd, p->bk);
+    while(p->fd!=NULL){
+	p = p->fd;
+        printf("chunk address = %p, prev_size = %d, chunk size: %d, fd = %p, bk = %p\n", p, p->prev_size, p->size, p->fd, p->bk);
+    }
+    printf("===============list view end=====================\n");    
+}
+
 int main() {
     // ---init----
     void *p0 = sbrk(0);
@@ -133,13 +154,9 @@ int main() {
     void *x3 = malloc_new(32);
     void *x4 = malloc_new(48);
     void *x5 = malloc_new(64);    
-    printf("===============after malloc(): trunk view=====================\n");    
-    printf("chunk address = %p, prev_size = %d, chunk size: %d, fd = %p, bk = %p\n", p, p->prev_size, p->size, p->fd, p->bk);
-    p = (void *) p + p->size-prev_inuse(p);
-    while(p < (void *) p0 + MEM_SIZE){
-        printf("chunk address = %p, prev_size = %d, chunk size: %d, fd = %p, bk = %p\n", p, p->prev_size, p->size, p->fd, p->bk);
-	p = (void *) p + p->size-prev_inuse(p);
-    }
+
+    view_chunk(head);
+    view_list(p);
 
     free_new(x1);
     free_new(x2);
@@ -147,12 +164,6 @@ int main() {
     free_new(x4);
     free_new(x5);
 
-    printf("===============after free(): chunk view=====================\n");    
-    p = (ty_chunk_ptr) p0;
-    printf("chunk address = %p, prev_size = %d, chunk size: %d, fd = %p, bk = %p\n", p, p->prev_size, p->size, p->fd, p->bk);
-    p = (void *) p + p->size-prev_inuse(p);
-    while(p < (void *) p0 + MEM_SIZE){
-        printf("chunk address = %p, prev_size = %d, chunk size: %d, fd = %p, bk = %p\n", p, p->prev_size, p->size, p->fd, p->bk);
-	p = (void *) p + p->size-prev_inuse(p);
-    }
+    view_chunk(p);
+    view_list(p);
 } 
