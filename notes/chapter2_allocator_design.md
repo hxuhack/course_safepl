@@ -21,7 +21,20 @@ To facialiate the dynamic allocation and deallocation of virtual memories, the o
 ## Section 2.2 Kernel Space Allocator
 The main functionality requirement of a kernel space allocator is to 1) allocate memory trunks based on the required size and 2) reclaim the memory once freed. Such operations should be done efficiently because kernel code is used by all processes. This is not difficult if not considering the fragmentation issues. However, as memory trunks are allocated and deallocated randomly, it will leave unused spaces between used trunks. If our allocation method tends to cut large unused trunks to meet the request of a small trunk, such unused spaces would become smaller and less reusable, knowing as fragmentation. To deal with the fragmentation issue, the allocation should be able to colase neighbor trunks if they are both free. The colasing algorithm should be efficient.
 
+The buddy system is a well-designed page-level allocator that can meet these needs, i.e., the smallest allocation size is one or several pages.
 
+### Allocation and Deallocation
+In the buddy system, free blocks are managed as lists, where each list maintains the blocks of the same size. For example, there could be n lists, where each list maintains the blocks of size 2^i; the largest block is 2^n-1 pages, and the smallest block is 2^0 pages. The allocator employs a best fit strategy to search the blocks of the corresponding size from the list. If the best fit list is empty, it continually search other list of larger blocks and seperate the block into smaller ones for allocation. If all such lists are empty or unavailable, the allocator will allocate new pages from unused memory spaces.
+![image](./figures/chapt2-buddy-3.png)
 
+### Handle Fragmentation
+If the allocator find a larger block during allocation, it needs to divide the block into smaller ones. The segmentation process is demonstrated as the following figure. Supossing the requested memory size is k bytes, the block (size 2^m) should be seperated in to halves n times until k>2^m-n-1. The rest blocks will be added back to the corresponding lists.
+![image](./figures/chapt2-buddy-1.png)
+
+Once the block is freed, the allocator immediately checks if its buddy is free and merge them if possible. The merging process is done recursively until the buddy is inuse. To faciliate the caculation of buddy addresses and the merging process, each block contains a header field as shown below. The TAG flag (1 bit) indicates whether the current block is allocated or free. The TYPE fields (2 bits) contains two bits to indicate whether the current block is a left or right buddy and whether its parrent is a left or righ buddy. The INDEX field (log n bits) contains the size information of the block. 
+![image](./figures/chapt2-buddy-2.png)
+
+### Demonstration
+TODO: add an example to demonstrate the allocation and colasing process.
 
 ## Section 2.3 User Space Allocator
