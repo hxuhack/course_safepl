@@ -38,3 +38,59 @@ Once the block is freed, the allocator immediately checks if its buddy is free a
 TODO: add an example to demonstrate the allocation and colasing process.
 
 ## Section 2.3 User Space Allocator
+Similar to the kernel space allocator, a user space allocator should also be efficient and handle fragmentation issues.
+
+To achieve efficient allocation, the user space allocator also maintains free lists for memory reuse. All freed memory trunks are added to the corresponding lists. This can avoid frequent context switch between the user space and kernel space which would slowdown the program. Different from the buddy system, user space memory blocks are generally small-sized. For example, in the Doug Lea's Allocator (a.k.a. [dlmalloc](https://github.com/ennorehling/dlmalloc/blob/master/malloc.c)), there are severl small regular bins with memory trunk size 16 bytes, 24 bytes, 32 bytes,...,512 bytes. Each regular bin is a double-linked list (to faciliate colasing). If a trunk is free, it contains a forward pointer and a backward pointer that link it to the bin. If it is not free, the pointer fields are used for data storage.
+![image](./figures/chapt2-dlmalloc-1.png)
+
+To handle fragmentation issues and achieve false colasing, each trunk contains a header field that allow the allocator to directly compute the address of contiguous trunks. As shown below, the header field contains 1) prev_size: size of the previous trunk to calculate the address of the previous trunk, 2) size: the size of the current trunk to calculate the address of the next trunk. Besides, it uses the last bit of the size to indicate whether the previous trunks is free or inuse. Note that because the minimal trunk size > 8 bytes, if representing the size information with a general integer, the last 3 bits is redundent. 
+![image](./figures/chapt2-dlmalloc-2.png)
+
+### Demonstration
+TODO: add an example to demonstrate the colasing process.
+
+## Practice
+Implement a simple user space allocator based on the [code templete](./code/chapt2-allocator-template.c).
+Hint:
+- The template contains one free list.
+- The trunk structure is defined as: 
+```
+struct chunk{
+    unsigned long prev_size;
+    unsigned long size; //use the last bit for prev_inuse
+    struct chunk* fd;
+    struct chunk* bk;
+};
+```
+- We have initialized the list with a trunk of 1024 bytes memory.
+```
+void *p0 = sbrk(0);
+brk(p0 + MEM_SIZE);
+ty_chunk_ptr p = (ty_chunk_ptr) p0;
+p->size = (unsigned long) MEM_SIZE | PREV_INUSE;
+head = p;
+p->bk = NULL;
+p->fd = NULL;
+```
+- Your task is to implement the malloc_new() and free() function. The malloc_new() function find a trunk in the list for allocation. If trunk size > required sizem it splits it into two chunks. The free_new() adds the trunk back to the list and do consolidations if possible. 
+- To check the correctness of your implementation, you can perform a few malloc and free operations and print the trunks.
+```
+void *x1 = malloc_new(8); 
+void *x2 = malloc_new(16);
+void *x3 = malloc_new(32);
+void *x4 = malloc_new(48);
+void *x5 = malloc_new(64);
+
+view_chunk(p);
+
+free_new(x1);
+free_new(x2);
+free_new(x3);
+free_new(x4);
+free_new(x5);
+
+view_chunk(p); 
+```
+
+
+
