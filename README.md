@@ -13,6 +13,8 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 | Week5 | Auto Reclaim | |
 | Week6 | Race Condition | |
 
+<!--
+
 #### Part2: Rust Programming Language
 - Week7: Chapt 7. Rust OBRM
 - Week8: Chapt 8. Rust Type System
