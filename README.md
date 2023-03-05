@@ -8,7 +8,7 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 |---|---|---|
 | Week1 | [Course Introduction](./slides/L0-Course_Intro.pdf), Stack Smashing | [slides](./slides/L1-Stack_Smashing.pdf),[notes](./notes/chapter1_stack_smash.md)|
 | Week2 | Allocator Design | [slides](./slides/L2-Allocator_Design.pdf), [notes](./notes/chapter2_allocator_design.md), [code](code/chapt2-allocator-template.c)
-| Week3 | Heap Attack | |
+| Week3 | Heap Attack | [slides](./slides/L2-Heap_Attack.pdf), [notes](./notes/chapter3_heap_attack.md) |
 <!--
 - Week4: Auto Memory Management
 - Week5: Memory Exhaustion
