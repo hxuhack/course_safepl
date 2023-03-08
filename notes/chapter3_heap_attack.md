@@ -2,6 +2,8 @@
 ## Section 2.1 Heap Analysis
 
 ## Section 2.2 Heap Attack
+To simplify our discussion, let's suppose the purpose of the attack is to obtain a pointer to an arbitrary address of our interest so that we can modify the data of the memory address. For example, we are interested in the return address because we may launch return-oriented programming attacks. We are also interested in the Global Offset Table (GOT) which maintains the addressing information of dynamic linked functions or position-independent code. For instance, wen may change the table entry of the widely used strcpy() function to a piece of malicious code. The similar method also applies to the Virtual Method Table (vtable) of C++/Rust code. 
+
 To simplify the attacking scenario, we assume there is one free list. Therefore, all malloc() and free() operations will be performed based on the same list. In practice, there could be several bins, and each bin could have several lists of different sized chunks, which increases the complexity of attacks.
 
 ### 2.2.1 Heap Overflow Attack
@@ -22,8 +24,20 @@ Therefore, we can directly modify the forward pointer of the free chunks via p1.
 ![image](./figures/chapt3-uaf-2.png)
 
 ### 2.2.2 Double Free Attack
+Suppose a free chunk pointed by p1 is already in the free list. Freeing p1 one more time executes the following link code.
+```
+p1->next = head->next;
+head->next = p1;
+```
+As a result, it would incur a self-linked chunk and breaks the list.
 ![image](./figures/chapt3-doublefree-1.png)
 
+Now we call malloc(), and it shoud unlink the chunk based on the following code.
+```
+p2 = head->next;
+head->next = p2->next;
+```
+In this way, we obtain a pointer p2 to an allocatedchunk, but the chunk is also on the list. We can leverage p2 to modify the forward pointer of the chunk. The rest steps are the same as those of the previous attacks. 
 ![image](./figures/chapt3-doublefree-2.png)
 
 ## Section 2.3 Protection Techniques
