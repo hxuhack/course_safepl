@@ -6,10 +6,10 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 
 | Schedule | Topic | Materials  |
 |---|---|---|
-| Week1 | Course Introduction, Stack Smashing | [slides1](./slides/L0-Course_Intro.pdf)[slides2](./slides/L1-Stack_Smashing.pdf),[notes](./notes/chapt1_stack_smash.md)|
-| Week2 | Allocator Design | [slides](./slides/L2-Allocator_Design.pdf), [notes](./notes/chapt2_allocator_design.md), [code](code/chapt2-allocator-template.c) |
-| Week3 | Heap Attack | [slides](./slides/L2-Heap_Attack.pdf), [notes](./notes/chapt3_heap_attack.md) |
-| Week4 | Memory Exhaustion | [slides](./slides/L4-Memory_Exhaustion.pdf),[notes](./notes/chapt4_memory_exhaustion.md), [code](code/chapt4-stackoverflow_template.c) |
+| Week1 | Course Introduction, Stack Smashing | [slides1](slides/L0-Course_Intro.pdf)[slides2](slides/L1-Stack_Smashing.pdf),[notes](notes/chapt1_stack_smash.md)|
+| Week2 | Allocator Design | [slides](slides/L2-Allocator_Design.pdf), [notes](notes/chapt2_allocator_design.md), [code](code/chapt2-allocator-template.c) |
+| Week3 | Heap Attack | [slides](slides/L2-Heap_Attack.pdf), [notes](notes/chapt3_heap_attack.md) |
+| Week4 | Memory Exhaustion | [slides](slides/L4-Memory_Exhaustion.pdf),[notes](notes/chapt4_memory_exhaustion.md), [code](code/chapt4-stackoverflow_template.c) |
 | Week5 | Auto Reclaim | |
 | Week6 | Race Condition | |
 
