@@ -28,26 +28,18 @@ void main(void){
 }
 
 ```
-The stack size for each thread is generally limited. In this way, the address space of each thread can be well seperated. For example, the default stack size is 8MB in Linux. However, you can adjust the stack with the ulimit command.
+The stack size for each thread is generally limited. In this way, the address space of each thread can be well seperated. For example, the default stack size is 8MB in Linux. However, you can adjust the stack with the ulimit command.  
 
 ```
-#: ulimit -a
-max locked memory       (kbytes, -l) 65536
-max memory size         (kbytes, -m) unlimited
-open files                      (-n) 1024
-pipe size            (512 bytes, -p) 8
-POSIX message queues     (bytes, -q) 819200
+#: ulimit -s
 stack size              (kbytes, -s) 8192
-max user processes              (-u) 30687
-...
-#: ulimit -s unlimited
+```
+
+The stack address of each thread is determined by the stack size limit. For example, 
+```
+#: ulimit -s 65536
 #: ulimit -a
-max locked memory       (kbytes, -l) 65536
-max memory size         (kbytes, -m) unlimited
-open files                      (-n) 1024
-pipe size            (512 bytes, -p) 8
-POSIX message queues     (bytes, -q) 819200
-stack size              (kbytes, -s) unlimited
+stack size              (kbytes, -s) 65536
 ```
 
 Besides, if developers think their program requies a large stack, they can adjust the stack size in their code, e.g., with the setrlimit() API in Linux.
