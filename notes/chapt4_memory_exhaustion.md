@@ -57,6 +57,37 @@ fprintf(stderr, "stack result = %d\n", r.rlim_cur);
 ## Section 3.2 Heap Exhaustion
 Heap allocation is not an atomic operation, such failures could occur in different stages. In generaly, the allocator should choose a address space for allocation at first. This step is unlikely to fail due to the large address space in X86_64. Meanwhile, the operating system may or may not allocate the phisical memory depending on its implementation. If there is not enough phisical memory, the malloc() function could return an error, and developers should check the return value before using the memory. However, the system may also employs a lazy mode, which is known as overcommit, i.e., do not allocate the phisical memory until it is accessed. In this way, the malloc() function is unlikely to fail. But if there is not enough phisical memory when accessed, the system would kill the process directly. Developers cannot handle such exceptions as easy as justifing the return value of malloc().
 
+Linux has three options for the allocation behavior.
+- 1: always overcommit, never check
+- 2: always check, never overcommit
+- 0: heuristic overcommit (this is the default)
+
+We can set the allocation mode with the following command.
+```
+#: sudo sysctl -w vm.overcommit_memory=2
+```
+
+We can test the behaviors of the system with the following program. If we choose the never overcommit mode (option 2), malloc() returns 0. If we use the overcommit mode (option 1), malloc() returns a valid memory address. But the process would killed when we access the memory with memset().
+```
+#define LARGE_SIZE 1024L*1024L*1024L*256L
+void main(void){
+    char* p = malloc (LARGE_SIZE);
+    if(p == 0) {
+        printf("malloc failed\n");
+    } else {
+        memset (p, 1, LARGE_SIZE);
+    }
+}
+```
+```
+#: sudo sysctl -w vm.overcommit_memory=2
+#:~/4-memoxhaustion$ ./a.out
+malloc failed
+#: sudo sysctl -w vm.overcommit_memory=1
+#:~/4-memoxhaustion$ ./a.out
+Killed
+```
+
 ## Section 3.3 Exception Handling
 
 ## Section 3.4 Stack Unwinding
