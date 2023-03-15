@@ -5,6 +5,62 @@ For example, one thread could be killed before releasing its acquired lock or al
 Althoug such issues are less harmful than buffer overflow or dangling pointers, we should not neglect such vulnerabilities for software systems with high reliability requirements.
 
 ## Section 3.1 Stack Overflow
+The following code provides a function for reading lists. Can you construct a list to overflow the stack? 
+```
+struct List{
+    int val;
+    struct List* next;
+};
+//vulnerable function with stack overflow risks. 
+void process(struct List* l, int cnt){
+    printf("%d\n", cnt);
+    if(l->next != NULL)
+        process(l->next, ++cnt);
+}
+```
+We can attack the function with a simple looped list.
+```
+void main(void){
+    struct List* list = malloc(sizeof(struct List));
+    list->val = 1;
+    list->next = list;
+    process(list, 0);
+}
+
+```
+The stack size for each thread is generally limited. In this way, the address space of each thread can be well seperated. For example, the default stack size is 8MB in Linux. However, you can adjust the stack with the ulimit command.
+
+```
+#: ulimit -a
+max locked memory       (kbytes, -l) 65536
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 1024
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+stack size              (kbytes, -s) 8192
+max user processes              (-u) 30687
+...
+#: ulimit -s unlimited
+#: ulimit -a
+max locked memory       (kbytes, -l) 65536
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 1024
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+stack size              (kbytes, -s) unlimited
+```
+
+Besides, if developers think their program requies a large stack, they can adjust the stack size in their code, e.g., with the setrlimit() API in Linux.
+```
+struct rlimit r;
+int result;
+result = getrlimit(RLIMIT_STACK, &r);
+fprintf(stderr, "stack result = %d\n", r.rlim_cur);
+r.rlim_cur = 64 * 1024L *1024L;
+result = setrlimit(RLIMIT_STACK, &r);
+result = getrlimit(RLIMIT_STACK, &r);
+fprintf(stderr, "stack result = %d\n", r.rlim_cur);
+```
 
 ## Section 3.2 Heap Exhaustion
 
