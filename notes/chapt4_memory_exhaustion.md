@@ -122,6 +122,7 @@ Killed
 ```
 
 ## Section 3.3 Exception Handling
+### OS Signal 
 Can developers handle stack overflow or heap exhaustion bugs in their own code? It depends on the operating system. When stack overflow occurs, the operating system raises a SIGSEGV signal. It may allow the process to capture and handle the signal or killed the process directly. 
 
 To simplify our discussion, we uses div 0 as an example. When the divisor is 0, the CPU will trigger an interrupt and executes the interrupt handling code specified in the interrupt vector of the operating system. The operating system then raises a signal SIGFPE (flating-point error). In the following code, we register the SIGFPE signal with the sigaction() API such that the code can jump to handle() when div 0.
@@ -145,10 +146,16 @@ int main(void){
 }
 ```
 
+### setjmp/longjmp
+How can we implement the handler function?
+
+
+### Handle Stack Overflow
 Handling the SIGSEV of stack overflow is much more difficult, because we do not have more stack spaces to execute the error handling code.
 
+
 ## Section 3.4 Stack Unwinding
-An alternative approach to jump to the exception handling code.  DWARF .eh_frame section.
+Stack unwinding is an alternative approach of setjmp/longjmp. Instead of backup the register recovery info during runtime, it computes such information during compile time and save such info in the executables, i.e., the .eh_frame section of ELF file in DWARF format.
 
 ```
 2690: endbr64
