@@ -55,6 +55,7 @@ fprintf(stderr, "stack result = %d\n", r.rlim_cur);
 ```
 
 ## Section 3.2 Heap Exhaustion
+Heap allocation is not an atomic operation, such failures could occur in different stages. In generaly, the allocator should choose a address space for allocation at first. This step is unlikely to fail due to the large address space in X86_64. Meanwhile, the operating system may or may not allocate the phisical memory depending on its implementation. If there is not enough phisical memory, the malloc() function could return an error, and developers should check the return value before using the memory. However, the system may also employs a lazy mode, which is known as overcommit, i.e., do not allocate the phisical memory until it is accessed. In this way, the malloc() function is unlikely to fail. But if there is not enough phisical memory when accessed, the system would kill the process directly. Developers cannot handle such exceptions as easy as justifing the return value of malloc().
 
 ## Section 3.3 Exception Handling
 
