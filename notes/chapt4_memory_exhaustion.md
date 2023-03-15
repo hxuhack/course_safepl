@@ -148,7 +148,8 @@ int main(void){
 Handling the SIGSEV of stack overflow is much more difficult, because we do not have more stack spaces to execute the error handling code.
 
 ## Section 3.4 Stack Unwinding
-An alternative approach to jump to the exception handling code.
+An alternative approach to jump to the exception handling code.  DWARF .eh_frame section.
+
 ```
 2690: endbr64
 2694: push   %r15
@@ -174,7 +175,7 @@ An alternative approach to jump to the exception handling code.
 2e9e: pop    %r15
 2ea0: retq
 ```
-
+We can use the readelf tool to dump the .eh_frame section.
 ```
 python3 pyelftools-master/scripts/readelf.py --debug-dump frames-interp /bin/cat
 ```
