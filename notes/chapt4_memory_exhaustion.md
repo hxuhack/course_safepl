@@ -1,4 +1,4 @@
-# Chapter 3. Memory Exhaustion and Handling
+# Chapter 4. Memory Exhaustion and Handling
 In this lecture, we study the issues of memory exhaustion, including stack overflow and heap overflow. Such issues would lead to unexpected thread or process termination. 
 Even worse, some program exit points may lead to unreleased resources or consistency issues. 
 For example, one thread could be killed before releasing its acquired lock or allocated memory. 
