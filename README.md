@@ -11,7 +11,7 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 | Week3 | Heap Attack | [slides](slides/L2-Heap_Attack.pdf), [notes](notes/chapt3_heap_attack.md) |
 | Week4 | Memory Exhaustion | [slides](slides/L4-Memory_Exhaustion.pdf), [notes](notes/chapt4_memory_exhaustion.md), [code](code/chapt4-stackoverflow_template.c) |
 | Week5 | Auto Reclaim | [slides](slides/L5-Auto_Reclaim.pdf), [notes](notes/chapt5_auto_reclaim.md) |
-| Week6 | Race Condition | |
+| Week6 | Concurrency | [slides](slides/L6-Concurrency), [notes](notes/chapt6_concurrency.md) |
 
 <!--
 
