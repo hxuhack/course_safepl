@@ -13,6 +13,9 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 | Week5 | Auto Reclaim | [slides](slides/L5-Auto_Reclaim.pdf), [notes](notes/chapt5_auto_reclaim.md) |
 | Week6 | Concurrency | [slides](slides/L6-Concurrency.pdf), [notes](notes/chapt6_concurrency.md) |
 | Week7 | No Class |  |
+
+### Part2: Rust Programming Language 
+| Schedule | Topic | Materials  |
 | Week8 | Rust Ownership-based Resource Management | [slides](slides/L7-Rust_OBRM.pdf), [notes](notes/chapt8_rust_obrm.md) |
 
 
