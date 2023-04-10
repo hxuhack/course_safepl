@@ -16,22 +16,6 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 | Week8 | Rust Ownership-based Resource Management | [slides](slides/L7-Rust_OBRM.pdf), [notes](notes/chapt8_rust_obrm.md) |
 
 
-<!--
-
-#### Part2: Rust Programming Language
-- Week7: Chapt 7. Rust OBRM
-- Week8: Chapt 8. Rust Type System
-- Week9: Chapt 9. Rust Concurrent Programming
-- Week10: Chapt 10. Limitations of Rust
-- Week11: by Guest Speaker
-
-#### Part3: Advanced Topics
-
-- Week12: Chapt 11. Static Analysis of Rust Programs
-- Week13: Chapt 12. Dynamic Analysis of Rust Programs
-- Week14: Chapt 13. Formal Verification
-
-
 ### Reading List
 
 **Empirical**
@@ -59,4 +43,3 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 **Other Language**
 - Emre, Mehmet, Ryan Schroeder, Kyle Dewey, and Ben Hardekopf. "[Translating C to safer Rust](https://dl.acm.org/doi/pdf/10.1145/3485498)." Proceedings of the ACM on Programming Languages 5, no. OOPSLA (2021): 1-29.
 - Sammler, Michael, Rodolphe Lepigre, Robbert Krebbers, Kayvan Memarian, Derek Dreyer, and Deepak Garg. "[RefinedC: automating the foundational verification of C code with refined ownership types](https://dl.acm.org/doi/pdf/10.1145/3453483.3454036)." In Proceedings of the 42nd ACM SIGPLAN International Conference on Programming Language Design and Implementation, pp. 158-174. 2021.
--->
