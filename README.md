@@ -12,6 +12,9 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 | Week4 | Memory Exhaustion | [slides](slides/L4-Memory_Exhaustion.pdf), [notes](notes/chapt4_memory_exhaustion.md), [code](code/chapt4-stackoverflow_template.c) |
 | Week5 | Auto Reclaim | [slides](slides/L5-Auto_Reclaim.pdf), [notes](notes/chapt5_auto_reclaim.md) |
 | Week6 | Concurrency | [slides](slides/L6-Concurrency.pdf), [notes](notes/chapt6_concurrency.md) |
+| Week7 | No Class |  |
+| Week8 | Rust Ownership-based Resource Management | [slides](slides/L7-Rust_OBRM.pdf), [notes](notes/chapt8_rust_obrm.md) |
+
 
 <!--
 
