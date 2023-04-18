@@ -18,6 +18,9 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 | Schedule | Topic | Materials  |
 |---|---|---|
 | Week8 | Rust Ownership-based Resource Management | [slides](slides/L7-Rust_OBRM.pdf), [notes](notes/chapt8_rust_obrm.md) |
+| Week9 | Rust Type System | [slides](slides/L8-Rust_Type_System.pdf), [notes](notes/chapt8_rust_type_system.md) |
+
+
 
 
 ### Reading List
