@@ -25,9 +25,6 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 
 
 
-
-
-
 ### Reading List
 
 **Empirical**
