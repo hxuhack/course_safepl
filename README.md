@@ -23,6 +23,7 @@ This is the course web page of COMP737011 Memory Safety and Programming Language
 | Week11 | Guest Lecture by Handong Zhang|  |
 | Week12 | Rust Bugs, More Features | [slides1](slides/L10-Rust_Bugs.pdf), [slides2](slides/L11-More_Features.pdf) |
 | Week13 | Rust Compiler and Enhancement | [slides](slides/L12-Rust_Compiler.pdf) |
+| Week14 | Memory Management of Other Languages (Zig, Go, Python) |  |
 
 
 
