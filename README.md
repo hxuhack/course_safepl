@@ -5,7 +5,7 @@ Term: 2025 Spring
 ## Lecture Notes
 ### Part : Foundations of Memory Safety 
 
-| Schedule | Topic | Materials | Code |
+| Date | Topic | Materials | Code |
 |---|---|---|---|
 | Week1 | Course Introduction, Stack Smashing | [slides1](slides/L0-Intro.pdf), [slides2](slides/L1-StackSmashing.pdf), [notes](notes/l1-stacksmash.md) | [vuln.c](code/l1-vuln.c), [shell.c](code/l1-shell.c), [hijack.py](code/l1-hijack.py) |
 | Week2 | | | |
@@ -14,7 +14,7 @@ Term: 2025 Spring
 | Week5 | | | |
 
 ### Part : Rust Programming Language 
-| Schedule | Topic | Materials  |
+| Date | Topic | Materials  |
 |---|---|---|
 | Week6 | | | 
 | Week7 | | | 
@@ -23,6 +23,8 @@ Term: 2025 Spring
 | Week10 | | | 
 
 ### Part : Advanced Topics
+| Date | Topic | Materials  |
+|---|---|---|
 | Week11 |  |  |
 | Week12 |  |  | 
 | Week13 |  |  | 
