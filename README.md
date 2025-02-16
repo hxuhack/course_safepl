@@ -4,9 +4,9 @@ This is the webpage of course COMP737011 Memory Safety and Programming Language 
 ## Lecture Notes
 ### Part : Foundations of Memory Safety 
 
-| Schedule | Topic | Materials |
+| Schedule | Topic | Materials | Code |
 |---|---|---|
-| Week1 | Course Introduction, Stack Smashing | [slides1](slides/L0-Intro.pdf), [slides2](slides/L1-StackSmashing.pdf), [notes](notes/L1-StackSmash.md) |
+| Week1 | Course Introduction, Stack Smashing | [slides1](slides/L0-Intro.pdf), [slides2](slides/L1-StackSmashing.pdf), [notes](notes/l1-stacksmash.md) | [vuln.c](code/l1-vuln.c), [shell.c](code/l1-shell.c), [hijack.py](code/l1-hijack.py) |
 | Week2 | <!--Allocator Design | [slides](slides/L2-Allocator_Design.pdf), [notes](notes/chapt2_allocator_design.md), [code](code/chapt2-allocator-template.c) | -->
 | Week3 | <!--Heap Attack | [slides](slides/L2-Heap_Attack.pdf), [notes](notes/chapt3_heap_attack.md) | -->
 | Week4 | <!--Memory Exhaustion | [slides](slides/L4-Memory_Exhaustion.pdf), [notes](notes/chapt4_memory_exhaustion.md), [code](code/chapt4-stackoverflow_template.c) | -->
