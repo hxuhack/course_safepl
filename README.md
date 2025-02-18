@@ -10,7 +10,7 @@ This is the webpage of course COMP737011 Memory Safety and Programming Language 
 
 | Date | Topic | Materials | Code |
 |---|---|---|---|
-| Week1 | Introduction, Stack Smashing | [slides1](slides/l0-intro.pdf), [slides2](slides/l1-stacksmash.pdf), [notes](notes/l1-stacksmash.md) | [vuln.c](code/l1-vuln.c), [shell.c](code/l1-shell.c), [hijack.py](code/l1-hijack.py) |
+| Week1 | Introduction, Stack Smashing | [slides1](slides/l0-intro.pdf), [slides2](slides/l1-stacksmash.pdf), [notes](notes/l1-stacksmash.md) | [vuln.c](code/l1-vuln.c), [shell.c](code/l1-shell.c), [hijack.py](code/l1-hijack.py), [shell.c](code/l1-aslr.c), [hijack.py](code/l1-rop.py) |
 | Week2 | | | |
 | Week3 | | | | 
 | Week4 | | | |
