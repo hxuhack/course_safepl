@@ -13,7 +13,7 @@ This is the webpage of course COMP737011 Memory Safety and Programming Language 
 | Week1 | Introduction, Stack Smashing | [slides1](slides/l0-intro.pdf), [slides2](slides/l1-stacksmash.pdf), [notes](notes/l1-stacksmash.md) | [vuln.c](code/l1-vuln.c), [shell.c](code/l1-shell.c), [exstack.py](code/l1-exstack.py), [shell.c](code/l1-aslr.c), [rop.py](code/l1-rop.py) |
 | Week2 | Allocator Design | [slides](slides/l2-allocator.pdf) | [allocator.c](code/l2-allocator.c) |
 | Week3 | Heap Attack | [slides](slides/l3-heapattack.pdf) | [heaptoy.c](code/l3-heaptoy.c) | 
-| Week4 | Memory Exhaustion | [slides](slides/l4-memoryexh.pdf) | |
+| Week4 | Memory Exhaustion | [slides](slides/l4-memexhaustion.pdf) | [stackoverflow.c](code/l4-stackoverflow.c), [stackhandle](code/l4-stackhandle.c), [heap](code/l4-heap.c), [smallheap](code/l4-smallheap.c) |
 | Week5 | Concurrency | | |
 
 ## Part II: Rust Programming Language 
