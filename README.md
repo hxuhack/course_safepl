@@ -14,7 +14,7 @@ This is the webpage of course COMP737011 Memory Safety and Programming Language 
 | Week2 | Allocator Design | [slides](slides/l2-allocator.pdf) | [allocator.c](code/l2-allocator.c) |
 | Week3 | Heap Attack | [slides](slides/l3-heapattack.pdf) | [heaptoy.c](code/l3-heaptoy.c) | 
 | Week4 | Memory Exhaustion | [slides](slides/l4-memexhaustion.pdf) | [stackoverflow.c](code/l4-stackoverflow.c), [stackhandle](code/l4-stackhandle.c), [heap](code/l4-heap.c), [smallheap](code/l4-smallheap.c) |
-| Week5 | Concurrency | | |
+| Week5 | Concurrency | [slides](slides/l5-concurrency.pdf) | [atomicint.c](code/l5-atomicint.c), [membarrier1](code/l5-membarrier1.c), [membarrier2](/code/l5-membarrier2.c) |
 
 ## Part II: Rust Programming Language 
 
