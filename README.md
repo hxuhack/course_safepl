@@ -19,12 +19,12 @@ This is the webpage of course COMP737011 Memory Safety and Programming Language 
 ## Part II: Rust Programming Language 
 
 | Date | Topic | Materials  |
-|---|---|---|
+|---|---|---|---|
 | Week6 | Rust Ownership | [slides](slides/l6-rust-owner.pdf) | [ownership.rs](code/l6-ownership.rs),[mutability.rs](code/l6-mutability.rs),[lifetime.rs](code/l6-lifetime.rs),[list-unsafe.rs](code/l6-list-unsafe.rs),[list-safe.rs](code/l6-list-safe.rs)| 
-| Week7 | | | 
-| Week8 | | | 
-| Week9 | | | 
-| Week10 | | | 
+| Week7 | Rust Type System | [Slides](slides/l7-rust-type.pdf) | [sinlist.rs](code/l7-sinlist.rs) | 
+| Week8 | | | |
+| Week9 | | | |
+| Week10 | | | |
 
 ## Part III: Advanced Topics
 
