@@ -22,7 +22,7 @@ This is the webpage of course COMP737011 Memory Safety and Programming Language 
 |---|---|---|---|
 | Week6 | Rust Ownership | [slides](slides/l6-rust-owner.pdf) | [ownership.rs](code/l6-ownership.rs),[mutability.rs](code/l6-mutability.rs),[lifetime.rs](code/l6-lifetime.rs),[list-unsafe.rs](code/l6-list-unsafe.rs),[list-safe.rs](code/l6-list-safe.rs)| 
 | Week7 | Rust Type System | [Slides](slides/l7-rust-type.pdf) | [sinlist.rs](code/l7-sinlist.rs) | 
-| Week8 | | | |
+| Week8 | Rust Concurrency | [Slides](slides/l8-rust-concurrency.pdf) | [check_send_sync.rs](code/l8-check_send_sync.rs), [sinlist.rs](code/l8-sinlist.rs), [sinlist.rs](code/l8-unsend.rs) | 
 | Week9 | | | |
 | Week10 | | | |
 
