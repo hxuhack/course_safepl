@@ -24,7 +24,7 @@ This is the webpage of course COMP737011 Memory Safety and Programming Language 
 | Week7 | Rust Type System | [Slides](slides/l7-rust-type.pdf) | [sinlist.rs](code/l7-sinlist.rs) | 
 | Week8 | Rust Concurrency | [Slides](slides/l8-rust-concurrency.pdf) | [check_send_sync.rs](code/l8-check_send_sync.rs), [sinlist.rs](code/l8-sinlist.rs), [sinlist.rs](code/l8-unsend.rs) | 
 | Week9 | More Features of Rust | [Slides](slides/l9-rust-more.pdf) |  |
-| Week10 | | | |
+| Week10 | Rust Toolchain | [Slides](slides/l10-rust-toolchain.pdf) | |
 
 ## Part III: Advanced Topics
 
