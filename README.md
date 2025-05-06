@@ -30,8 +30,8 @@ This is the webpage of course COMP737011 Memory Safety and Programming Language 
 
 | Date | Topic | Materials  |
 |---|---|---|
-| Week11 |  |  |
-| Week12 |  |  | 
+| Week11 | Alias Analysis | [Slides](slides/l11-aliasanalysis.pdf) |
+| Week12 | Alias Analysis |  | 
 | Week13 |  |  | 
 | Week14 |  |  | 
 | Week15 |  |  |
